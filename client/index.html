@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>编译原理</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.31.2/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <transition name="page" :duration="1300">
+      <div class="page" :is="page" @change-page="onChangePage"></div>
+    </transition>
+  </div>
+</body>
+
+
+<!-- 目录页 -->
+<template id="start">
+  <div class="start">
+    <div class="inner">
+      <div style="height: 30%;"></div>
+      <h1 class="title enter-1">词法分析器和语法分析器</h1>
+      <h3 class="tiptext enter-2">by xxx xxx xxx</h3>
+      <div class="button-wrapper enter-3">
+        <button class="button button-start" type="button" @click="$emit('change-page', 'compiler')"> <span
+            class="button-text">Start !</span></button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="lexer">
+  <!-- 词法分析 -->
+  <div class="radio-buttons-container">
+    <div class="label">词法分析</div>
+    <div class="radio-button">
+      <input name="classify" id="history" value="history" class="radio-button__input" type="radio" v-model="table"
+        @change="$emit('get-data', table)">
+      <label for="history" class="radio-button__label">
+        <span class="radio-button__custom"></span>
+        单词符号串
+      </label>
+    </div>
+    <div class="radio-button">
+      <input name="classify" id="name" value="name" class="radio-button__input" type="radio" v-model="table"
+        @change="$emit('get-data', table)">
+      <label for="name" class="radio-button__label">
+        <span class="radio-button__custom"></span>
+        符号表
+      </label>
+    </div>
+  </div>
+</template>
+
+
+<template id="grammar">
+  <!-- 语法分析 -->
+  <div class="radio-buttons-container">
+    <div class="label">语法分析</div>
+    <div class="radio-button">
+      <input name="classify" id="lr" value="lr" class="radio-button__input" type="radio" v-model="table"
+        @change="$emit('get-data', table)">
+      <label for="lr" class="radio-button__label">
+        <span class="radio-button__custom"></span>
+        LR(1)分析表
+      </label>
+    </div>
+    <div class="radio-button">
+      <input name="classify" id="process" value="process" class="radio-button__input" type="radio" v-model="table"
+        @change="$emit('get-data', table)">
+      <label for="process" class="radio-button__label">
+        <span class="radio-button__custom"></span>
+        分析过程
+      </label>
+    </div>
+    <div class="radio-button">
+      <input name="classify" id="tree" value="tree" class="radio-button__input" type="radio" v-model="table"
+        @change="$emit('get-data', table)">
+      <label for="tree" class="radio-button__label">
+        <span class="radio-button__custom"></span>
+        语法树
+      </label>
+    </div>
+  </div>
+</template>
+
+
+<!-- 编译过程 -->
+<template id="compiler">
+  <div class="next">
+    <div class="page">
+      <div class="inner enter-1" style="width: 38%;">
+        <!-- 编辑器 -->
+        <div id="ace-editor" style="height: 58%;"></div>
+        <div style="height: 4%;"></div>
+        <!-- 按钮组 -->
+        <div class="display" style="height: 38%; overflow-y: auto;">
+          <div class="button-wrapper enter-2" style="margin-bottom: 5%;">
+            <input id="file-input" type="file" style="width: 0; height: 0; opacity: 0;" />
+            <button class="button button-next" type="button" @click="handleSelect()"><span id="file-input-cover"
+                class="button-text">选择文件</span></button>
+          </div>
+          <div class="button-wrapper enter-3" style="margin-bottom: 5%;">
+            <button class="button button-next" type="button" @click="lexicalAnalysis()"><span
+                class="button-text">词法分析</span></button>
+          </div>
+          <div class="button-wrapper enter-4" style="margin-bottom: 5%;">
+            <button class="button button-next" type="button" @click="grammaticalAnalysis()"><span
+                class="button-text">语法分析</span></button>
+          </div>
+          <div class="button-wrapper enter-4" style="margin-bottom: 5%;">
+            <button class="button button-next" type="button" @click="$emit('change-page', 'start')"><span
+                class="button-text">返回主页</span></button>
+          </div>
+        </div>
+      </div>
+      <!-- 展示区 -->
+      <div class="inner display enter-1" id="display" style="width: 55%;">
+        <div id="canvas"></div>
+        <component :is="form" @get-data="dataToDom"></component>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<script src="./script.js"></script>
+<script src="./renderer.js"></script>
+<script src="./client.js"></script>
+
+</html>
